@@ -1,1 +1,129 @@
+name: Predictive Maintenance MLOps Pipeline
 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  register-dataset:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+
+        uses: actions/setup-python@v5
+
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+
+        run: |
+          pip install -r predictive_maintenance_project_13062026/requirements.txt
+
+      - name: Register Dataset
+
+        env:
+          HF_TOKEN1: ${{ secrets.HF_TOKEN1 }}
+
+        run: |
+          python predictive_maintenance_project_13062026/model_building/data_register.py
+
+  data-preparation:
+
+    needs: register-dataset
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+
+        uses: actions/setup-python@v5
+
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+
+        run: |
+          pip install -r predictive_maintenance_project_13062026/requirements.txt
+
+      - name: Data Preparation
+
+        env:
+          HF_TOKEN1: ${{ secrets.HF_TOKEN1 }}
+
+        run: |
+          python predictive_maintenance_project_13062026/model_building/prep.py
+
+  model-training:
+
+    needs: data-preparation
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+
+        uses: actions/setup-python@v5
+
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+
+        run: |
+          pip install -r predictive_maintenance_project_13062026/requirements.txt
+
+      - name: Train Model
+
+        env:
+          HF_TOKEN1: ${{ secrets.HF_TOKEN1 }}
+
+        run: |
+          python predictive_maintenance_project_13062026/model_building/train.py
+
+  deploy-space:
+
+    needs:
+      - register-dataset
+      - data-preparation
+      - model-training
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+
+        uses: actions/setup-python@v5
+
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+
+        run: |
+          pip install -r predictive_maintenance_project_13062026/requirements.txt
+
+      - name: Deploy Streamlit App
+
+        env:
+          HF_TOKEN1: ${{ secrets.HF_TOKEN1 }}
+
+        run: |
+          python predictive_maintenance_project_13062026/hosting/hosting.py
