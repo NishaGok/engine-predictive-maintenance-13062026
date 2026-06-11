@@ -5,6 +5,17 @@ import os
 
 repo_id = "NishaGok/engine-predictive-maintenance-13062026"
 repo_type = "dataset"
+import os
+
+print(
+    "HF_TOKEN1 present:",
+    os.getenv("HF_TOKEN1") is not None
+)
+
+print(
+    "HF_TOKEN1 length:",
+    len(os.getenv("HF_TOKEN1", ""))
+)
 
 api = HfApi(token=os.getenv("HF_TOKEN1"))
 
