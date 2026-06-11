@@ -24,11 +24,11 @@ try:
     print("Dataset repo already exists")
 
 except RepositoryNotFoundError:
-    create_repo(
-        repo_id=repo_id,
-        repo_type=repo_type,
-        private=False
-    )
+    api.create_repo(
+    repo_id=repo_id,
+    repo_type=repo_type,
+    private=False
+)
     print("Dataset repo created")
 
 api.upload_folder(
