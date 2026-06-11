@@ -331,11 +331,11 @@ try:
 
 except RepositoryNotFoundError:
 
-    create_repo(
-        repo_id=repo_id,
-        repo_type=repo_type,
-        private=False
-    )
+    api.create_repo(
+    repo_id=repo_id,
+    repo_type=repo_type,
+    private=False
+)
 
     print(
         "Model repo created"
